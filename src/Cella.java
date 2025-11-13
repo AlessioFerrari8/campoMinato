@@ -65,9 +65,11 @@ public class Cella extends Canvas {
         return c;
     }
     
-    public void setBandiera() {
+    public void toggleBandiera() {
         if (stato == StatoCella.Coperto) {
             stato = StatoCella.Bandiera;
+        } else {
+            stato = StatoCella.Coperto;
         }
         repaint();
     }
