@@ -99,6 +99,8 @@ public class Campo extends JPanel {
         for (int i = 0; i < campo.length; i++) {
             for (int j = 0; j < campo[0].length; j++) {
                 
+                mineContate = 0;
+
                 if (campo[i][j].getContenuto() == MINA) {
                     continue;
                 }
@@ -112,10 +114,11 @@ public class Campo extends JPanel {
                                 mineContate++;
                             }
                         } catch (ArrayIndexOutOfBoundsException e) {
-
+                            // salto cella
                         }
                     }
                 }
+                campo[i][j].setContenuto(mineContate);
 
             }
         }
