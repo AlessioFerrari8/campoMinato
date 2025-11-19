@@ -79,37 +79,47 @@ public class Campo extends JPanel {
     private void generaMine() {
         Random rand = new Random();
 
-        for (int i = 0; i < mine; i++) {
-            int r = rand.nextInt(0, campo.length);
-            int c = rand.nextInt(0, campo.length);
-            if (campo[r][c].getContenuto() == MINA) {
-                break;
+        int mineInserite = 0;
+       
+        while (mineInserite < mine) {
+            int r = rand.nextInt(campo.length);
+            int c = rand.nextInt(campo[0].length);
+            if(campo[r][c].getContenuto() != MINA) {
+                campo[r][c].setContenuto(MINA);
+                mineInserite++;
             }
-            campo[r][c].setContenuto(MINA);
+            
         }
     }
 
     private void contaIndizi() {
+
+        int mineContate = 0;
+
         for (int i = 0; i < campo.length; i++) {
             for (int j = 0; j < campo[0].length; j++) {
-                if (campo[i][j].isScoperta()) {
-                    int count = 0;
-                    for (int x = -1; x <= 1; x++) {
-                        for (int y = -1; y <= 1; y++) {
-                            if (x == 0 && y == 0) continue;
-                            int ni = i + x;
-                            int nj = j + y;
-                            if (ni >= 0 && ni < campo.length && nj >= 0 && nj < campo[0].length) {
-                                if (campo[ni][nj].getContenuto() == MINA) {
-                                    count++;
-                                }
+                
+                if (campo[i][j].getContenuto() == MINA) {
+                    continue;
+                }
+
+                // scorro le adiacenze 3*3
+                for (int j2 = i-1; j2 < i+1; j2++) {
+                    for (int k = j-1; k < j+1; k++) {
+                        // controllo validità celle
+                        try {
+                            if (campo[j2][k].getContenuto() == MINA) {
+                                mineContate++;
                             }
+                        } catch (ArrayIndexOutOfBoundsException e) {
+
                         }
                     }
-                    campo[i][j].setContenuto(count);
                 }
+
             }
         }
+       
     }
 
     private void scopriCella(int x, int y) {
