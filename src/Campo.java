@@ -125,33 +125,13 @@ public class Campo extends JPanel {
        
     }
 
-    private void scopriCella(int x, int y) {
-    
-        if (x < 0 || x >= campo.length || y < 0 || y >= campo[0].length) {
-            return;
-        }
-    
-        Cella cella = campo[x][y];
-    
-        if (cella.isScoperta()) {
-            return;
-        }
-    
-        cella.setVisible(true);
-    
-        if (cella.getContenuto() == MINA) {
-            System.out.println("Game Over! You hit a mine.");
-            return;
-        }
-    
-        if (cella.getContenuto() == 0) {
-            for (int dx = -1; dx <= 1; dx++) {
-                for (int dy = -1; dy <= 1; dy++) {
-                    if (dx != 0 || dy != 0) {
-                        scopriCella(x + dx, y + dy);
-                    }
-                }
-            }
-        }
+    private void scopriCella(int r, int c) {
+
+        // chiusura
+
+        // caso base
+
+        // chiamata ricorsiva
+
     }
 }
