@@ -106,8 +106,8 @@ public class Campo extends JPanel {
                 }
 
                 // scorro le adiacenze 3*3
-                for (int j2 = i-1; j2 < i+1; j2++) {
-                    for (int k = j-1; k < j+1; k++) {
+                for (int j2 = i-1; j2 <= i+1; j2++) {
+                    for (int k = j-1; k <= j+1; k++) {
                         // controllo validità celle
                         try {
                             if (campo[j2][k].getContenuto() == MINA) {
