@@ -72,14 +72,73 @@ public class Campo extends JPanel {
 
         // imposta gli indizi
         contaIndizi();
+
+        scopriCella(maxMine, maxMine);
     }
 
     private void generaMine() {
         Random rand = new Random();
 
+        for (int i = 0; i < mine; i++) {
+            int r = rand.nextInt(0, campo.length);
+            int c = rand.nextInt(0, campo.length);
+            if (campo[r][c].getContenuto() == MINA) {
+                break;
+            }
+            campo[r][c].setContenuto(MINA);
+        }
     }
 
     private void contaIndizi() {
-        
+        for (int i = 0; i < campo.length; i++) {
+            for (int j = 0; j < campo[0].length; j++) {
+                if (campo[i][j].isScoperta()) {
+                    int count = 0;
+                    for (int x = -1; x <= 1; x++) {
+                        for (int y = -1; y <= 1; y++) {
+                            if (x == 0 && y == 0) continue;
+                            int ni = i + x;
+                            int nj = j + y;
+                            if (ni >= 0 && ni < campo.length && nj >= 0 && nj < campo[0].length) {
+                                if (campo[ni][nj].getContenuto() == MINA) {
+                                    count++;
+                                }
+                            }
+                        }
+                    }
+                    campo[i][j].setContenuto(count);
+                }
+            }
+        }
+    }
+
+    private void scopriCella(int x, int y) {
+    
+        if (x < 0 || x >= campo.length || y < 0 || y >= campo[0].length) {
+            return;
+        }
+    
+        Cella cella = campo[x][y];
+    
+        if (cella.isScoperta()) {
+            return;
+        }
+    
+        cella.setVisible(true);
+    
+        if (cella.getContenuto() == MINA) {
+            System.out.println("Game Over! You hit a mine.");
+            return;
+        }
+    
+        if (cella.getContenuto() == 0) {
+            for (int dx = -1; dx <= 1; dx++) {
+                for (int dy = -1; dy <= 1; dy++) {
+                    if (dx != 0 || dy != 0) {
+                        scopriCella(x + dx, y + dy);
+                    }
+                }
+            }
+        }
     }
 }

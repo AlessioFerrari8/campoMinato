@@ -1,5 +1,6 @@
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 
 public class Cella extends Canvas {
@@ -36,8 +37,42 @@ public class Cella extends Canvas {
     public void paint(Graphics g) {
         super.paint(g);
 
+        g.setFont(new Font("Consolas", Font.BOLD, 16));
 
-        
+        switch (stato) {
+            case Coperto:
+                g.setColor(Color.orange);
+                g.fillRect(0, 0, getWidth(), getHeight());
+                break;
+            case Scoperta:
+                g.setColor(Color.green);
+                g.fillRect(0, 0, getWidth(), getHeight());
+                // se c'è una mina la disegniamo
+                if (contenuto == MINA) {
+                    g.setColor(Color.red);
+                    g.fillOval(0, 0, getWidth(), getHeight());
+                } else if (contenuto > 0) {
+                    g.setColor(colori[contenuto]);
+                    g.drawString(contenuto + "", getWidth() / 3, 2 * getHeight()/ 3);
+                }
+
+                break;
+            case Bandiera:
+                g.setColor(Color.orange);
+                g.fillRect(0, 0, getWidth(), getHeight());
+
+                g.setColor(Color.black);
+                g.fillRect(5, 5, getWidth() / 7, getHeight() - 5);
+                g.setColor(Color.red);
+
+                int xPoints[] = {getWidth() / 3, getWidth() - 5, getWidth()/3};
+                int yPoints[] = {5, 2*getHeight()/5, 2*getHeight()/3};
+                g.fillPolygon(xPoints, yPoints, 3);
+                break;
+        }
+
+        g.setColor(Color.black);
+        g.drawRect(0, 0, getWidth() - 1, getHeight() - 1);
     }
 
     public boolean isScoperta() {
