@@ -127,6 +127,10 @@ public class Campo extends JPanel {
 
     private void scopriCella(int r, int c) {
 
+        if (campo[r][c].isBandiera()) {
+            return;
+        }
+        campo[r][c].setVisible(true);
         // chiusura
 
         // caso base
