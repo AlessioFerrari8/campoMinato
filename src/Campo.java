@@ -44,6 +44,12 @@ public class Campo extends JPanel {
                             case MouseEvent.BUTTON1:
                                 // scopro la cella
                                 scopriCella(cliccata.getR(), cliccata.getC());
+
+                                if (checkVittoria()) {
+                                    JOptionPane.showMessageDialog(null, "You won!");
+                                    return;
+                                }
+
                                 break;
                             case MouseEvent.BUTTON3:
                                 if (cliccata.isScoperta())
@@ -61,7 +67,7 @@ public class Campo extends JPanel {
 
                         }
 
-                        super.mouseReleased(e);
+                        // super.mouseReleased(e);
 
                     }
                 });
@@ -163,8 +169,9 @@ public class Campo extends JPanel {
 
     private boolean checkVittoria() {
         boolean win = true;
-
-        ciclo: // label, identifica il ciclo più esterno
+        
+        // label, identifica il ciclo più esterno
+        ciclo: 
         for (int i = 0; i < campo.length; i++) {
             for (int j = 0; j < campo.length; j++) {
                 if (!campo[i][j].isScoperta() && campo[i][j].getContenuto() != MINA) { // se è coperto e non è una mina
