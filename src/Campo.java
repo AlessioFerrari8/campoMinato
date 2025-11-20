@@ -29,12 +29,13 @@ public class Campo extends JPanel {
 
                 campo[r][c].addMouseListener(new MouseAdapter() {
 
-                    // usiamo una classe anonima perché dobbiamo implementare diversi metodi astratti
+                    // usiamo una classe anonima perché dobbiamo implementare diversi metodi
+                    // astratti
                     // non si può usare la lambda function
                     @Override
                     public void mouseReleased(MouseEvent e) {
-                        
-                        Cella cliccata = (Cella)e.getSource();
+
+                        Cella cliccata = (Cella) e.getSource();
 
                         // button 1: pulsante sx
                         // button 2: tasto centrale / rotellina
@@ -42,11 +43,11 @@ public class Campo extends JPanel {
                         switch (e.getButton()) {
                             case MouseEvent.BUTTON1:
                                 // scopro la cella
-
+                                scopriCella(cliccata.getR(), cliccata.getC());
                                 break;
                             case MouseEvent.BUTTON3:
                                 if (cliccata.isScoperta())
-                                break;
+                                    break;
 
                                 if (!cliccata.isScoperta() && nBandiere == mine) {
                                     JOptionPane.showMessageDialog(null, "Hai usato tutte le bandiere");
@@ -57,9 +58,9 @@ public class Campo extends JPanel {
                                 // incremento
                                 nBandiere += cliccata.isBandiera() ? +1 : -1;
                                 break;
-                        
+
                         }
-                        
+
                         super.mouseReleased(e);
 
                     }
@@ -72,23 +73,21 @@ public class Campo extends JPanel {
 
         // imposta gli indizi
         contaIndizi();
-
-        scopriCella(maxMine, maxMine);
     }
 
     private void generaMine() {
         Random rand = new Random();
 
         int mineInserite = 0;
-       
+
         while (mineInserite < mine) {
             int r = rand.nextInt(campo.length);
             int c = rand.nextInt(campo[0].length);
-            if(campo[r][c].getContenuto() != MINA) {
+            if (campo[r][c].getContenuto() != MINA) {
                 campo[r][c].setContenuto(MINA);
                 mineInserite++;
             }
-            
+
         }
     }
 
@@ -98,7 +97,7 @@ public class Campo extends JPanel {
 
         for (int i = 0; i < campo.length; i++) {
             for (int j = 0; j < campo[0].length; j++) {
-                
+
                 mineContate = 0;
 
                 if (campo[i][j].getContenuto() == MINA) {
@@ -106,8 +105,8 @@ public class Campo extends JPanel {
                 }
 
                 // scorro le adiacenze 3*3
-                for (int j2 = i-1; j2 <= i+1; j2++) {
-                    for (int k = j-1; k <= j+1; k++) {
+                for (int j2 = i - 1; j2 <= i + 1; j2++) {
+                    for (int k = j - 1; k <= j + 1; k++) {
                         // controllo validità celle
                         try {
                             if (campo[j2][k].getContenuto() == MINA) {
@@ -122,7 +121,7 @@ public class Campo extends JPanel {
 
             }
         }
-       
+
     }
 
     private void scopriCella(int r, int c) {
@@ -130,12 +129,50 @@ public class Campo extends JPanel {
         if (campo[r][c].isBandiera()) {
             return;
         }
-        campo[r][c].setVisible(true);
-        // chiusura
-
         // caso base
+        campo[r][c].setVisible(true);
+
+        // controllo se ho perso
+        if (campo[r][c].getContenuto() == MINA) {
+            JOptionPane.showMessageDialog(null, "Game Over!");
+            System.exit(0);
+        }
+
+        // chiusura
+        if (campo[r][c].getContenuto() > 0) { // se incappo in un numero
+            return;
+        }
 
         // chiamata ricorsiva
+        for (int riga = r - 1; riga <= r + 1; riga++) {
+            for (int col = c - 1; col <= c + 1; col++) {
 
+                if (riga == r && col == c)
+                    continue;
+                // controllo se le celle adiacenti sono coperte
+                try {
+                    if (!campo[riga][col].isScoperta()) {
+                        scopriCella(riga, col);
+                    }
+                } catch (ArrayIndexOutOfBoundsException e) {
+
+                }
+            }
+        }
+    }
+
+    private boolean checkVittoria() {
+        boolean win = true;
+
+        ciclo: // label, identifica il ciclo più esterno
+        for (int i = 0; i < campo.length; i++) {
+            for (int j = 0; j < campo.length; j++) {
+                if (!campo[i][j].isScoperta() && campo[i][j].getContenuto() != MINA) { // se è coperto e non è una mina
+                    win = false;
+                    break ciclo;
+                }
+            }
+        }
+        return win;
     }
 }
